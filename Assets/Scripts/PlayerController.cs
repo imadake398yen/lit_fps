@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
 	public GameObject fpsCamera;
 	public GameObject sparks;
+	public GameObject hitSound;
 	public AudioSource audio;
 	Ray ray;
 	RaycastHit hit;
@@ -46,6 +47,8 @@ public class PlayerController : MonoBehaviour {
 		ray = fpsCamera.camera.ScreenPointToRay(center);
 		if (Physics.Raycast(ray,out hit,100)) {
 			Debug.Log(hit.point);
+			GameObject se = Instantiate (hitSound, hit.point, Quaternion.identity) as GameObject;
+			Destroy(se.gameObject, 0.6f);
 		}
 		Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
 	}
