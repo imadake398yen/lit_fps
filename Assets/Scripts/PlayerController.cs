@@ -3,20 +3,43 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
+	public GameObject fpsCamera;
+	public GameObject sparks;
+	public AudioSource audio;
 	Ray ray;
 	RaycastHit hit;
-	GameObject fpsCamera;
+	float shotInterval = 0.1f;
+
 
 	void Awake () {
 		Screen.lockCursor = true;
-    	Screen.showCursor = false;
-    	fpsCamera = GameObject.Find("Main Camera") as GameObject;
+  		Screen.showCursor = false;
 	}
+
 	
 	void Update () {
-		if (Input.GetMouseButton(0)) 
-			Shot();
+
+		Debug.Log(Input.mousePosition);
+
+		if (Input.GetMouseButtonDown(0)) {
+			sparks.SetActive(true);
+		}
+
+		if (Input.GetMouseButtonUp(0)) {
+			sparks.SetActive(false);
+		}
+
+		if (Input.GetMouseButton(0)){ 
+			shotInterval -= Time.deltaTime;
+			if (shotInterval < 0) {
+				audio.PlayOneShot(audio.clip);
+				shotInterval = 0.1f;
+				Shot();
+			}
+		}
+
 	}
+
 
 	void Shot () {
 		Vector3 center = new Vector3(Screen.width/2, Screen.height/2, 0);
@@ -26,5 +49,6 @@ public class PlayerController : MonoBehaviour {
 		}
 		Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
 	}
+
 
 }
