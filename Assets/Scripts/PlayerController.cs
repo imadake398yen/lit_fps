@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
@@ -8,9 +9,13 @@ public class PlayerController : MonoBehaviour {
 	public GameObject sparks;
 	public GameObject hitSound;
 	public AudioSource audio;
+	public Text bulletLabel;
 	Ray ray;
 	RaycastHit hit;
 	float shotInterval = 0.1f;
+	int magagine = 30;
+	int bullet = 300;
+
 
 
 	void Awake () {
@@ -43,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 
 
 	void Shot () {
+		
 		audio.PlayOneShot(audio.clip);
 		Vector3 center = new Vector3(Screen.width/2, Screen.height/2, 0);
 		ray = playerCamera.camera.ScreenPointToRay(center);
@@ -53,6 +59,10 @@ public class PlayerController : MonoBehaviour {
 			if (hit.transform.gameObject.tag == "Enemy") hit.transform.gameObject.SendMessage("ReceiveDamage",1);
 		}
 		Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
+
+		magagine--;
+		bulletLabel.text = magagine + " / " + bullet;
+
 	}
 
 
