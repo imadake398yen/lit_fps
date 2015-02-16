@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour {
 		if (Physics.Raycast(ray,out hit,100)) {
 			// Debug.Log(hit.point);
 			GameObject se = Instantiate (hitSound, hit.point, Quaternion.identity) as GameObject;
-			Destroy(se.gameObject, 0.6f);
+			Destroy(se.gameObject, 0.2f);
+			if (hit.transform.gameObject.tag == "Enemy") hit.transform.gameObject.SendMessage("ReceiveDamage",1);
 		}
 		Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
 	}
