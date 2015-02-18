@@ -44,25 +44,49 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
+		if (Input.GetKeyDown("r")) {
+			print("Reload!");
+			BulletReload();
+		}
+
 	}
 
 
 	void Shot () {
-		
-		audio.PlayOneShot(audio.clip);
-		Vector3 center = new Vector3(Screen.width/2, Screen.height/2, 0);
-		ray = playerCamera.camera.ScreenPointToRay(center);
-		if (Physics.Raycast(ray,out hit,100)) {
-			// Debug.Log(hit.point);
-			GameObject se = Instantiate (hitSound, hit.point, Quaternion.identity) as GameObject;
-			Destroy(se.gameObject, 0.2f);
-			if (hit.transform.gameObject.tag == "Enemy") hit.transform.gameObject.SendMessage("ReceiveDamage",1);
+
+		if (magagine > 0) {
+
+			audio.PlayOneShot(audio.clip);
+			Vector3 center = new Vector3(Screen.width/2, Screen.height/2, 0);
+			ray = playerCamera.camera.ScreenPointToRay(center);
+			if (Physics.Raycast(ray,out hit,100)) {
+				// Debug.Log(hit.point);
+				GameObject se = Instantiate (hitSound, hit.point, Quaternion.identity) as GameObject;
+				Destroy(se.gameObject, 0.2f);
+				if (hit.transform.gameObject.tag == "Enemy") hit.transform.gameObject.SendMessage("ReceiveDamage",1);
+			}
+			Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
+
+			magagine--;
+			bulletLabel.text = magagine + " / " + bullet;
+
 		}
-		Debug.DrawLine(ray.origin, ray.direction * 100, Color.yellow);
 
-		magagine--;
-		bulletLabel.text = magagine + " / " + bullet;
+	}
 
+
+	void BulletReload () {
+		if (bullet >= 30) {
+			bullet -= (30 - magagine);
+			magagine = 30;
+			bulletLabel.text = magagine + " / " + bullet;
+		} else if (0 < bullet && bullet < 30) {
+			magagine += bullet;
+			bullet = 0;
+			bulletLabel.text = magagine + " / " + bullet;
+		} else {
+			return;
+		}
 	}
 
 
